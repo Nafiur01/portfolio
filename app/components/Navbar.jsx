@@ -1,10 +1,12 @@
 "use client";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
   const sideMenuRef = useRef();
+
+  const [isScroll, setIsScroll] = useState(false);
 
   const openMenu = () => {
     sideMenuRef.current.style.transform = "translateX(-16rem)";
@@ -14,14 +16,28 @@ const Navbar = () => {
     sideMenuRef.current.style.transform = "translateX(16rem)";
   };
 
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (scrollY > 50) {
+        setIsScroll(true);
+      } else {
+        setIsScroll(false);
+      }
+    });
+  });
+
   return (
     <>
       <div className="fixed top-0 right-0 w-11/12 translate-y-[-80%] -z-10">
         <Image src={assets.header_bg_color} alt="" className="w-full" />
       </div>
 
-      <nav className="w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex justify-between z-50">
-        <a href="#top">
+      <nav
+        className={`w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex justify-between z-50 ${
+          isScroll ? "bg-white backdrop-blur-lg bg-opacity-50 shadow-sm" : ""
+        }`}
+      >
+        <a href="#top" className="flex items-center">
           <Image
             src={assets.logo}
             className="cursor-pointer w-28 mr-14"
@@ -29,7 +45,11 @@ const Navbar = () => {
           />
         </a>
 
-        <ul className="hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 bg-white shadow-sm bg-opacity-50">
+        <ul
+          className={`hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 ${
+            isScroll ? "" : "bg-white shadow-sm bg-opacity-50"
+          }`}
+        >
           <li>
             <a href="#top" className="font-Ovo">
               Home
@@ -80,7 +100,10 @@ const Navbar = () => {
           ref={sideMenuRef}
           className="flex md:hidden flex-col gap-4 py-20 px-10 fixed -right-64 top-0 bottom-0 w-64 z-50 h-screen bg-rose-50 transition duration-500"
         >
-          <div className="absolute top-6 right-6 cursor-pointer" onClick={closeMenu}>
+          <div
+            className="absolute top-6 right-6 cursor-pointer"
+            onClick={closeMenu}
+          >
             <Image src={assets.close_black} alt="" className="w-5" />
           </div>
           <li>
